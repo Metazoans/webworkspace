@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    fetch('http://localhost:3000/info', {
+      method : 'post',
+      
+      // application/x-www-form-urlencoded
+      body : new URLSearchParams({search : 'yedam'})
+    })
+    .then(res => res.text())
+    .then(result => console.log(result))
+    .catch(err => console.log(err));
+  </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html> <!--문서 유형 지정-->
+<html lang="ko">    <!--문서 시작, 언어 설정-->
+    <head>  <!--브라우저 정보 나열, 제목 등-->
+        <meta charset="utf-8">
+        <title>첫 페이지</title>
+        <link href="css/index.css" rel="stylesheet">
+        <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet"> -->
+        <style>
+            ul{
+                border: 1px solid red;
+            }
+            nav ul li{
+                /* list-style: inside; */
+                /* text-align: center; */
+                list-style: none;
+                display: inline-block;
+                /* display: inline; */
+                padding: 10px;
+                margin: 10px;
+                border-radius: 10px;
+                border-bottom: 3px solid #000;
+            }
+            nav a{
+                text-decoration: none;
+                font-weight: bold;
+                background-color: beige;
+                /* padding: 10px; */
+            }
+            #float{
+                /* float: left; */
+                float: right;
+                margin: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>나의 첫 페이지!!!</h1>
+            <p class="redtext">나는 <q>김선용</q>입니다.</p>
+            <p class="redtext">반갑습니다.</p>
+            <hr> <!--화면에 가로줄 작성 태그-->
+            <nav id="menu">
+                <ul>
+                    <li>★ <a href="#text">텍스트</a></li>
+                    <li>❤ <a href="#list">목록</a></li>
+                    <li>👍 <a href="#table">표</a></li>
+                    <li>✨ <a href="#img">이미지</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section>
+            <h2>태그 종류</h2>
+            <article>
+                <h2 id="text">텍스트 관련 태그</h2>
+                <p><strong><em>Lorem ipsum</em></strong> dolor sit amet consectetur adipisicing
+                    <br> elit. Similique quidem iure expedita ullam saepe
+                     <b><i>nisi</i></b> cupiditate natus, nam eius repellat illo
+                      rem at fuga itaque! Sint incidunt assumenda quia
+                       ipsum!</p>
+                <!-- 
+                    lorem 작성 후 엔터시 더미 텍스트 입력
+                    lorem+숫자 = 숫자만큼의 단어를 입력, ex)lorem10
+                    <br> 태그 = 줄바꿈
+                    기능만 가진 태그로 닫는 태그 없음(br, hr 등)
+                -->
+                
+                <blockquote cite="www.naver.com">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero, hic.</blockquote>
+        
+                <pre>Lorem ipsum dolor sit amet consectetur adipisicing
+                     elit. Nihil facilis ratione rerum, at modi dolore
+                      dolorum voluptatem libero laborum veritatis!</pre>
+        
+                <p><mark><span style="color : blue">Lorem ipsum</span></mark>
+                     dolor sit amet consectetur adipisicing
+                     <div style="color : red">elit. Molestiae cumque voluptate quae</div>
+                      optio vitae excepturi voluptatibus
+                       aliquid veniam accusantium officia!</p>
+        
+                <abbr title = "본말">줄임말</abbr>
+                <p>사과<small>(5kg)</small></p>
+                <h3>H<sub>2</sub>O</h3>
+                <h3>y<sup>2</sup> = x<sup>2</sup></h3>
+
+                <!-- ctrl+enter = 커서만 다음줄로 이동 -->
+                <!-- 코드 드래그 -> alt+화살표 = 드래그한 범위의 코드를 한 단락씩 이동 -->
+                
+                <h3><ruby>學習<rt>학습</rt></ruby></h3>
+            </article>
+            <p><a href="#menu">top</a></p>
+            <article>
+                        <h2 id="list">목록 관련 태그</h2>
+                
+                        <p>코끼리 가방에 넣기</p>
+                        <ol type="i" start="3">
+                            <li>가방을 연다</li>
+                            <li>코끼리 넣는다</li>
+                            <li>가방을 닫는다</li>
+                        </ol>
+                        <p>여행 준비물</p>
+                        <ul>
+                            <li>돈 / 카드</li>
+                            <li>핸드폰</li>
+                            <li>이어폰</li>
+                        </ul>
+                        <p>프론트 엔드 개발도구</p>
+                        <dl>
+                            <dt>HTML</dt>
+                            <dd>웹 문서의 내용을 작성</dd>
+                            <dt>CSS</dt>
+                            <dd>웹 문서의 디자인을 담당</dd>
+                            <dd>문서를 보기 좋게 꾸며줌</dd>
+                            <dt>Java Script</dt>
+                            <dd>웹 문서에서 사용자의 동작에 반응하는 동적 페이지 구성</dd>
+                        </dl>
+            </article>
+            <p><a href="#menu">top</a></p>
+            <article>
+                <h3 id="table">표 만들기</h3>
+                <table>
+                    <caption>표 제목</caption>
+                    <thead>
+                        <tr>
+                            <th>순번</th>
+                            <th>이름</th>
+                            <th>연락처</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>1</td>
+                        <td>홍길동</td>
+                        <td>010-1111-1111</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>성춘향</td>
+                        <td>010-2222-2222</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>아무나</td>
+                        <td>010-3333-3333</td>
+                    </tr>
+                </table>
+                <table>
+                    <caption>선물용과 가정용 상품 구성</caption>
+                    <colgroup>
+                        <col span="2" style="background-color: aliceblue;">
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>용도</th>
+                            <th>중량</th>
+                            <th>개수</th>
+                            <th>가격</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">선물용</td>
+                            <td>3kg</td>
+                            <td>11~16과</td>
+                            <td>35,000원</td>
+                        </tr>
+                        <tr>
+                            <td>5kg</td>
+                            <td>18~26과</td>
+                            <td>52,000원</td>
+                        </tr><tr>
+                            <td rowspan="2">가정용</td>
+                            <td>3kg</td>
+                            <td>11~16과</td>
+                            <td>30,000원</td>
+                        </tr><tr>
+                            <td>5kg</td>
+                            <td>18~26과</td>
+                            <td>47,000원</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">가격은 상황에 따라 변동될 수 있습니다.</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </article>
+
+            <article>
+                <table id="room">
+                    <caption>요안도라 객실</caption>
+                    
+                    <thead>
+                        <tr>
+                            <th>방 이름</th>
+                            <th>대상</th>
+                            <th>크기</th>
+                            <th>가격</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>유채방</td>
+                            <td>여성 도미토리</td>
+                            <td rowspan="3">4인실</td>
+                            <td rowspan="4">1인 20,000원</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">동백방</td>
+                            <td>동성 도미토리</td>
+                        </tr>
+                        <tr>
+                            <td>가족 1팀</td>
+                        </tr>
+                        <tr>
+                            <td>천혜향방</td>
+                            <td>-</td>
+                            <td>2인실</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">바깥채 전체를 렌트합니다</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </article>
+            <p><a href="#menu">top</a></p>
+
+            <article>
+                <h3>링크 만들기</h3>
+                <a href="https://www.naver.com" title="네이버로 이동" target="_blank">네이버</a>
+                <a href="멀티미디어.html" target="_blank" title="멀티미디어 페이지로 이동">
+                    <img src="img/레드향.jfif" width="50" height="50" alt="레드향">
+                </a>
+                <a href="img/레드향.jfif" download>파일 다운로드</a>
+                <a href="강아지용품.html" download>html 다운로드</a>
+            </article>
+        </section>
+        
+        <aside>
+            <h3 id="img">이미지 삽입</h3>
+            <img src="img/레드향.jfif" alt="레드향" id="float">
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat quas sapiente ratione consequuntur corrupti possimus similique repellendus, officiis commodi placeat nemo nulla animi dicta vitae. Aperiam nisi saepe eveniet ex?Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ad reiciendis harum minus non possimus assumenda tempora nihil impedit adipisci repellat similique esse neque molestias sint exercitationem quod. Sit, unde.</p>
+            <figure>
+                <img src="img/레드향.jfif" alt="레드향" title="잠이 달아나는 이미지">
+                <img src="img/레드향.jfif" alt="레드향" title="잠이 달아나는 이미지">
+                <img src="img/레드향.jfif" alt="레드향" title="잠이 달아나는 이미지">
+                <figcaption>잠이 달아나는 상큼한 이미지</figcaption>
+            </figure>
+        </aside>
+        <p><a href="#menu">top</a></p>
+
+
+    </body>
+</html>
