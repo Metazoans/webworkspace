@@ -1,0 +1,29 @@
+
+[vue 프로젝트 구조 설명] -> components를 파일로 작성시 두개 이상의 단어로 작성(vue 파일명 : 첫글자는 대문자로 이루어진 두개 이상의 단어)
+assets     : 정적 파일(css, js, 이미지파일)
+components : 한 페이지를 구성하는 조각들
+router     : 프로젝트 내부에 등록된 라우팅 관리
+views       : 라우팅에서 호출하는 큰 규모의 components
+app.vue    : root 객체 정의
+main.js    :  vue 객체 시작점
+
+Router  -> 경로 : view -> component
+                     ㄴㄴ component
+        -> 경로 : view -> component
+                     ㄴㄴ component
+        -> 경로 : view -> component
+                     ㄴㄴ component
+
+
+
+import(vue 방식) -> require과 같은 역할, 모듈 추가(node 방식)
+export default router(vue 방식) -> module.exports = router (node 방식)
+=> 방식은 통일 시켜야함
+
+
+[컴포넌트 호출 방식] -> 목적이 다름(router는 원 페이지로 추가 / 자식 컴포넌트는 일부분일때)
+1) 자식 컴포넌트로 등록 => 특정 페이지의 조각을 구성
+=> App.vue의 script에 import 및 export (자식 컴포넌트로 추가)
+
+2) 페이지 단위로 호출
+=> router/index.js에 import 및 routes 추가 -> App.vue에 router-link 추가
