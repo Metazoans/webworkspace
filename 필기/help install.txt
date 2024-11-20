@@ -1,0 +1,40 @@
+<Node.js>
+
+server 파일 생성
+npm init
+
+module 다운
+npm install
+
+express 다운
+npm install express
+
+mysql 다운
+npm install mysql
+
+nodemon 다운
+npm install nodemon --save-dev
+
+
+<Vue.js>
+
+vue 다운
+npm install -g @vue/cli
+
+vue 프로젝트 생성 (vue-test = 프로젝트명)
+vue create vue-test
+
+디렉토리 변경
+cd vue-test
+
+vue 서버 실행
+npm run serve
+
+vuex 설치
+vue add vuex
+
+vuex-persistedstate 설치(vuex는 일회성이라 유지하는 라이브러리)
+npm install vuex-persistedstate
+
+axios 설치
+npm install axios
