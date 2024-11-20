@@ -97,7 +97,10 @@ export default {
       this.$router.push({name : 'customerList'});
     },
     async goToUpdateForm() {
-
+      this.$router.push({
+        name : 'customerUpdate',
+        params : { customerId : this.customer.id }
+      })
     }
   }
 }

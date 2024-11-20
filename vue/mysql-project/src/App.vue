@@ -14,7 +14,10 @@
 
 
 <script>
-
+import DefaultHeader from './layouts/DefaultHeader.vue';
+export default {
+  
+}
 </script>
 
 

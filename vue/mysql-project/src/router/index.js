@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import CustomerList from '@/views/CustomerList.vue'
 import CustomerInfo from '@/views/CustomerInfo.vue'
 import CustomerAdd from '@/views/CustomerAdd.vue'
+import CustomerUpdate from '@/views/CustomerUpdate.vue'
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: '/customerAdd',
     name: 'customerAdd',
     component: CustomerAdd
+  },
+  {
+    path: '/customerUpdate/:customerId', // params
+    name: 'customerUpdate',
+    component: CustomerUpdate
   }
 ]
 
