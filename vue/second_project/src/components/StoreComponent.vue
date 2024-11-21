@@ -2,20 +2,15 @@
 <template>
   <div>
     <form>
-      <label>
-        제품ID :
+      <label>제품ID : 
         <input type="text" v-model="prodInfo.product_id">
       </label>
-      <br>
-      <label>
-        제품명 :
+      <label>제품명 : 
         <input type="text" v-model="prodInfo.product_name">
       </label>
-      <br>
-      <label>
-        카테고리 :
-        <input type="radio" value="A" v-model="prodInfo.category"> A
-        <input type="radio" value="B" v-model="prodInfo.category"> B
+      <label>카테고리 : 
+        <input type="radio" value="A" v-model="prodInfo.category">A
+        <input type="radio" value="B" v-model="prodInfo.category">B
       </label>
       <br>
       <button type="button" @click="addCart">추가</button>
@@ -30,8 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr :key="info.product_id" 
-            v-for="info in products">
+        <tr :key="info.product_id" v-for="info in products">
           <td>{{ info.category }}</td>
           <td>{{ info.product_id }}</td>
           <td>{{ info.product_name }}</td>
@@ -42,7 +36,6 @@
 </template>
 
 <script>
-
 export default{
   data(){
     return{
@@ -67,10 +60,12 @@ export default{
         product_id : this.prodInfo.product_id,
         product_name : this.prodInfo.product_name,
         category : this.prodInfo.category
-      }
-      // actions에 등록된 함수를 호출
+      };
       this.$store.dispatch('addProduct', obj);
+      // 참조 타입을 변수값에 넣으면 같은 객체를 공유하게 되서 같이 변경되므로 변수에 넣지 말자.
+      // 객체를 복사할때는 반드시 새로운 객체를 만들어서 넣어라.
     }
-  }
+  },
+
 }
 </script>

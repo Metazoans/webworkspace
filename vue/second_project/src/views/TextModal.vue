@@ -1,4 +1,4 @@
-<!-- views/TextModal.vue-->
+<!-- views/TextModal.vue -->
 <template>
   <Layout>
     <template v-slot:header>
@@ -12,12 +12,14 @@
       <button type="button">닫기</button>
     </template>
   </Layout>
+
 </template>
+
 <script>
 import Layout from './ModalLayout.vue'
 
 export default{
-  components : {
+  components  : {
     Layout
   }
 }

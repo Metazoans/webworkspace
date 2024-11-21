@@ -1,19 +1,21 @@
 <!-- components/PageTitle.vue -->
 <template>
-  <h2>{{ title }}</h2>
+  <h3>{{ titleData }}</h3>
+  <p>△자식 데이터</p>
 </template>
+
 <script>
 export default {
   /*
   data(){
     return {
-      'title' : 'Hello, World!'
+      titleData : 'Hello, World'
     }
   },
   */
-  props : ['title'], // 부모가 넘겨준 값들
+  props: ['titleData'],     // 부모가 넘겨준 값들
   created(){
-    console.log('PageTitle.vue Created');
+    console.log('PageTitle.vue Create');
   },
   mounted(){
     console.log('PageTitle.vue Mounted');

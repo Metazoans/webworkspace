@@ -3,15 +3,15 @@
   <table>
     <tr>
       <th>제목</th>
-      <td>{{ title }}</td>
+      <th>{{ title }}</th>
       <th>조회수</th>
-      <td>{{ readInfo }}</td>
+      <th>{{ readInfo }}</th>
     </tr>
     <tr>
       <th>작성자</th>
-      <td>{{ writer }}</td>
+      <th>{{ writer }}</th>
       <th>작성일자</th>
-      <td>{{ regdate }}</td>
+      <th>{{ regdate }}</th>
     </tr>
     <tr>
       <th>내용</th>
@@ -22,9 +22,10 @@
     </tr>
   </table>
 </template>
+
 <script>
-export default {
-  //props : ['title', 'count', 'writer', 'regdate', 'content'],
+export default{
+  // props : ['title', 'count', 'writer', 'regdate', 'content'],
   props : {
     title : String,
     count : {
@@ -33,9 +34,9 @@ export default {
     },
     writer : {
       type : [String, Object],
-      default : function(){
+      default : function() {
         return { first : 'Adward', second : 'Ian'}
-      }
+      } 
     },
     regdate : {
       required : true,
@@ -49,14 +50,18 @@ export default {
   },
   computed : {
     readInfo(){
-      return this.count + 1;
+      return this.count +1 ;
     }
   },
   methods : {
     updateInfo(){
       // 이벤트 전달
-      this.$emit('update-info', this.readInfo);
+      this.$emit('update-info', this.readInfo );
     }
   }
 }
 </script>
+
+<style>
+
+</style>

@@ -7,8 +7,7 @@
   </div>
 </template>
 <script>
-
-export default {
+export default{
   data(){
     return {
       content : ''
@@ -19,8 +18,7 @@ export default {
       if((typeof this.content) == 'number'){
         let sum = this.content + 100;
         this.content = sum;
-      }
-      else {
+      } else {
         alert('데이터 타입이 숫자가 아닙니다.');
       }
     }
