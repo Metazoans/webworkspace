@@ -634,11 +634,17 @@ BEGIN
         -- 몇단인지 출력
         IF num = 0 THEN
             FOR dan IN 2 .. 9 LOOP
-                DBMS_OUTPUT.PUT(' ===' || dan || '단===   ');
+                DBMS_OUTPUT.PUT('  == ' || dan || '단 ==   ');
             END LOOP;
         ELSE
             FOR dan IN 2 .. 9 LOOP
-                DBMS_OUTPUT.PUT(dan || ' * ' || num || ' = ' || (dan * num));
+                IF dan * num >= 10 THEN
+                    DBMS_OUTPUT.PUT(dan || ' X ' || num || ' = ' || (dan * num));
+                ELSE
+                    DBMS_OUTPUT.PUT(dan || ' X ' || num || ' =  ' || (dan * num));
+                END IF;
+                
+                DBMS_OUTPUT.PUT('    ');
             END LOOP;
         END IF;
         
