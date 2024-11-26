@@ -560,6 +560,7 @@ ORDER BY department_id;
 사원이름, 급여, 연봉->(급여*12+(급여*nvl(커미션퍼센트,0)*12))
 을 출력하는  PL/SQL을 작성하시오.
 */
+-- 연봉을 따로 계산(커미션 SELECT)
 DECLARE
     -- 커서 정의 : 부서번호 입력 / 이름, 급여, 커미션 출력
     CURSOR emp_cursor IS
@@ -595,6 +596,66 @@ BEGIN
 END;
 /
 
+-- 3-1 RECORD 사용
+DECLARE
+    -- 커서 정의 : 부서번호 입력 / 이름, 급여, 커미션 출력
+    CURSOR emp_cursor IS
+        SELECT last_name, salary, commission_pct
+        FROM employees
+        WHERE department_id = &부서번호;
+    
+    v_emp_rec emp_cursor%ROWTYPE;
+    v_year NUMBER;
+BEGIN
+    -- 커서 실행
+    OPEN emp_cursor;
+    
+    LOOP
+        -- 데이터 인출 : 이름, 급여, 보너스
+        FETCH emp_cursor INTO v_emp_rec;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        
+        -- 데이터 사용
+        -- 연봉 = (급여*12+(급여*nvl(커미션퍼센트,0)*12))
+        v_year := v_emp_rec.salary * 12 + (v_emp_rec.salary * NVL(v_emp_rec.commission_pct,0) * 12);
+        -- 이름, 급여, 연봉 출력
+        DBMS_OUTPUT.PUT_LINE(v_emp_rec.last_name || ', ' || v_emp_rec.salary || ', ' || v_year);
+    END LOOP;
+    
+    -- 커서 종료
+    CLOSE emp_cursor;
+END;
+/
+
+-- alias 사용 가능(select문 가져올때 별칭 지정)
+-- 3-2 ALIAS
+DECLARE
+    -- 커서 정의 : 부서번호 입력 / 이름, 급여, 커미션 출력
+    CURSOR emp_cursor IS
+        SELECT last_name, salary, (salary * 12 + (salary * NVL(commission_pct,0) * 12)) as year
+        FROM employees
+        WHERE department_id = &부서번호;
+    
+    v_emp_rec emp_cursor%ROWTYPE;
+    v_year NUMBER;
+BEGIN
+    -- 커서 실행
+    OPEN emp_cursor;
+    
+    LOOP
+        -- 데이터 인출 : 이름, 급여, 보너스
+        FETCH emp_cursor INTO v_emp_rec;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        
+        -- 데이터 사용
+        -- 이름, 급여, 연봉 출력
+        DBMS_OUTPUT.PUT_LINE(v_emp_rec.last_name || ', ' || v_emp_rec.salary || ', ' || v_emp_rec.year);
+    END LOOP;
+    
+    -- 커서 종료
+    CLOSE emp_cursor;
+END;
+/
 
 
 
