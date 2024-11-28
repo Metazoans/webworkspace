@@ -425,13 +425,15 @@ EXECUTE yedam_ju('1511013689977')
 */
 DROP PROCEDURE yedam_ju;
 CREATE PROCEDURE yedam_ju
-    (p_number VARCHAR2)
+    (p_number VARCHAR2) -- 주민번호 입력(문자열)
 IS
     v_result VARCHAR2(30);
 BEGIN
+    -- 입력받은 번호 변경
     v_result := SUBSTR(p_number, 1, 6)
 --                || '-' || SUBSTR(p_number, 7, 1) || '******';
                 || '-' || RPAD(SUBSTR(p_number, 7, 1), 7, '*');
+    -- 결과 출력
     DBMS_OUTPUT.PUT_LINE(v_result);
 END;
 /
@@ -447,17 +449,21 @@ EXECUTE yedam_ju('1511013689977');
 */
 DROP PROCEDURE test_pro;
 CREATE PROCEDURE test_pro
-    (p_eid NUMBER)
+    (p_eid NUMBER) -- 사원번호 입력
 IS
+    -- 사원 없는 경우 에러 정의
     p_del_fail EXCEPTION;
 BEGIN
+    -- 사원 삭제
     DELETE FROM employees
     WHERE employee_id = p_eid;
     
+    -- 사원 없는 경우 체크
     IF SQL%ROWCOUNT = 0 THEN
         RAISE p_del_fail;
     END IF;
-EXCEPTION
+    
+EXCEPTION -- 예외 처리
     WHEN p_del_fail THEN
         DBMS_OUTPUT.PUT_LINE('해당사원이 없습니다.');
 END;
@@ -475,10 +481,9 @@ EXECUTE TEST_PRO(176);
 */
 DROP PROCEDURE yedam_emp;
 CREATE PROCEDURE yedam_emp
-    (p_eid NUMBER)
+    (p_eid NUMBER) -- 사원번호 입력
 IS
     v_ename employees.last_name%TYPE;
-    v_cnt NUMBER := 0;
 BEGIN
     -- 입력받은 사원번호로 이름 저장
     SELECT last_name
@@ -486,27 +491,20 @@ BEGIN
     FROM employees
     WHERE employee_id = p_eid;
     
-    -- 첫글자 출력
-    DBMS_OUTPUT.PUT(SUBSTR(v_ename, 1, 1));
-    -- 남은 글자 수 만큼 별 출력
-    WHILE v_cnt < (LENGTH(v_ename) - 1) LOOP
-        DBMS_OUTPUT.PUT('*');
-        
-        v_cnt := v_cnt + 1;
-    END LOOP;
-    -- 라인 종료
-    DBMS_OUTPUT.PUT_LINE('');
+    -- 이름 변경
+    v_ename := RPAD(SUBSTR(v_ename, 1, 1), LENGTH(v_ename), '*');
+    
+    -- 변경된 이름 출력
+    DBMS_OUTPUT.PUT_LINE(v_ename);
 END;
 /
 
-EXECUTE yedam_emp(174);
+EXECUTE yedam_emp(104);
 
-SELECT *
-FROM employees
-WHERE employee_id = 174;
-
-SELECT *
+SELECT employee_id, last_name
 FROM employees;
+--102 de haan / 104 ernst
+
 /*
 4.
 부서번호를 입력할 경우 
@@ -517,60 +515,86 @@ FROM employees;
 */
 DROP PROCEDURE get_emp;
 CREATE PROCEDURE get_emp
-    -- 부서번호 입력받음
-    (p_dnum NUMBER)
+    (p_dnum NUMBER) -- 부서번호 입력
 IS
+    -- 사원번호, 사원이름, 입사일 검색
     CURSOR emp_cursor IS
-        -- 사원번호, 사원이름, 연차(현재 년도 - 입사일)
         SELECT employee_id, last_name, hire_date
         FROM employees
         WHERE department_id = p_dnum;
-    
     
     v_emp_rec emp_cursor%ROWTYPE;
     
     -- 사원 없는 경우 에러
     p_no_emp EXCEPTION;
 BEGIN
+    -- 커서 실행
     OPEN emp_cursor;
     
+    -- 사원 정보 출력 (사원번호, 사원이름, 연차)
     LOOP
-    
+        FETCH emp_cursor INTO v_emp_rec;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        
+        DBMS_OUTPUT.PUT(v_emp_rec.employee_id || ', ');
+        DBMS_OUTPUT.PUT(v_emp_rec.last_name || ', ');
+        DBMS_OUTPUT.PUT_LINE(ROUND((SYSDATE - v_emp_rec.hire_date)/365) || '년차');
     END LOOP;
     
-    
-    DBMS_OUTPUT.PUT_LINE(v_eid || ', ' || v_ename || ', ' || SYSDATE - v_hdate);
-    
     -- 사원 없는 경우 에러 발생
-    IF SQL%ROWCOUNT = 0 THEN
+    IF emp_cursor%ROWCOUNT = 0 THEN
         RAISE p_no_emp;
     END IF;
-
-EXCEPTION
+    
+    -- 커서 종료
+    CLOSE emp_cursor;
+    
+EXCEPTION -- 예외 처리
     WHEN p_no_emp THEN
         DBMS_OUTPUT.PUT_LINE('해당 부서에는 사원이 없습니다.');
 END;
 /
 
-EXECUTE get_emp(30);
+EXECUTE get_emp(60);
 SELECT * 
 FROM employees
 WHERE department_id = 60;
+
 /*
 5.
 직원들의 사번, 급여 증가치만 입력하면 Employees테이블에 쉽게 사원의 급여를 갱신할 수 있는 y_update 프로시저를 작성하세요. 
 만약 입력한 사원이 없는 경우에는 ‘No search employee!!’라는 메시지를 출력하세요.(예외처리)
 실행) EXECUTE y_update(200, 10)
 */
-CREATE PROCEDURE
-
+DROP PROCEDURE y_update;
+CREATE PROCEDURE y_update
+    --사번, 급여 증가치(퍼센트) 입력
+    (p_eid NUMBER,
+     p_inc_sal NUMBER)
 IS
-
+    -- 사원 없는 경우 예외 정의
+    p_no_emp EXCEPTION;
 BEGIN
-
+    -- 사원의 급여 갱신
+    UPDATE employees
+    SET salary = salary + (salary * (p_inc_sal/100))
+    WHERE employee_id = p_eid;
+    
+    -- 사원 없는 경우 체크
+    IF SQL%ROWCOUNT = 0 THEN
+        RAISE p_no_emp;
+    END IF;
+    
+EXCEPTION -- 예외 처리
+    WHEN p_no_emp THEN
+        DBMS_OUTPUT.PUT_LINE('No search employee!!');
 END;
 /
 
+EXECUTE y_update(200, 10);
+SELECT employee_id, salary
+FROM employees
+WHERE employee_id = 200;
 
 
 
