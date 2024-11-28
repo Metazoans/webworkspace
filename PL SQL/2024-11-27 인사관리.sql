@@ -449,7 +449,7 @@ EXECUTE yedam_ju('1511013689977');
 */
 DROP PROCEDURE test_pro;
 CREATE PROCEDURE test_pro
-    (p_eid NUMBER) -- 사원번호 입력
+    (p_eid IN employees.employee_id%TYPE) -- 사원번호 입력
 IS
     -- 사원 없는 경우 에러 정의
     p_del_fail EXCEPTION;
@@ -468,7 +468,7 @@ EXCEPTION -- 예외 처리
         DBMS_OUTPUT.PUT_LINE('해당사원이 없습니다.');
 END;
 /
-EXECUTE TEST_PRO(176);
+EXECUTE TEST_PRO(206);
 
 /*
 3.
@@ -481,9 +481,10 @@ EXECUTE TEST_PRO(176);
 */
 DROP PROCEDURE yedam_emp;
 CREATE PROCEDURE yedam_emp
-    (p_eid NUMBER) -- 사원번호 입력
+    (p_eid IN employees.employee_id%TYPE) -- 사원번호 입력
 IS
     v_ename employees.last_name%TYPE;
+    v_result employees.last_name%TYPE;
 BEGIN
     -- 입력받은 사원번호로 이름 저장
     SELECT last_name
@@ -492,10 +493,10 @@ BEGIN
     WHERE employee_id = p_eid;
     
     -- 이름 변경
-    v_ename := RPAD(SUBSTR(v_ename, 1, 1), LENGTH(v_ename), '*');
+    v_result := RPAD(SUBSTR(v_ename, 1, 1), LENGTH(v_ename), '*');
     
     -- 변경된 이름 출력
-    DBMS_OUTPUT.PUT_LINE(v_ename);
+    DBMS_OUTPUT.PUT_LINE(v_ename || ' -> ' || v_result);
 END;
 /
 
@@ -503,7 +504,6 @@ EXECUTE yedam_emp(104);
 
 SELECT employee_id, last_name
 FROM employees;
---102 de haan / 104 ernst
 
 /*
 4.
@@ -513,15 +513,20 @@ FROM employees;
 단, 사원이 없을 경우 "해당 부서에는 사원이 없습니다."라고 출력(exception 사용)
 실행) EXECUTE get_emp(30)
 */
+-- 일한 년도로써의 연차 : 1년차부터 시작
+-- MONTHS_BETWEEN(SYSDATE, HIRE_DATE) -> 총개월수
+-- MONTHS_BETWEEN(SYSDATE, HIRE_DATE) / 12 -> 개월 차이, 실수로 결과 나옴
+-- CEIL(MONTHS_BETWEEN(SYSDATE, HIRE_DATE) / 12) -> 올림 함수
+
 DROP PROCEDURE get_emp;
 CREATE PROCEDURE get_emp
-    (p_dnum NUMBER) -- 부서번호 입력
+    (p_did IN employees.department_id%TYPE) -- 부서번호 입력
 IS
     -- 사원번호, 사원이름, 입사일 검색
     CURSOR emp_cursor IS
         SELECT employee_id, last_name, hire_date
         FROM employees
-        WHERE department_id = p_dnum;
+        WHERE department_id = p_did;
     
     v_emp_rec emp_cursor%ROWTYPE;
     
@@ -538,7 +543,7 @@ BEGIN
         
         DBMS_OUTPUT.PUT(v_emp_rec.employee_id || ', ');
         DBMS_OUTPUT.PUT(v_emp_rec.last_name || ', ');
-        DBMS_OUTPUT.PUT_LINE(ROUND((SYSDATE - v_emp_rec.hire_date)/365) || '년차');
+        DBMS_OUTPUT.PUT_LINE(CEIL((SYSDATE - v_emp_rec.hire_date)/365) || '년차');
     END LOOP;
     
     -- 사원 없는 경우 에러 발생
@@ -552,10 +557,69 @@ BEGIN
 EXCEPTION -- 예외 처리
     WHEN p_no_emp THEN
         DBMS_OUTPUT.PUT_LINE('해당 부서에는 사원이 없습니다.');
+        CLOSE emp_cursor;
 END;
 /
 
-EXECUTE get_emp(60);
+-- 경력으로써의 연차 : 개월수부터 시작
+-- TRUNC(숫자1, 숫자2) => 숫자2는 숫자 표현, TRUNC(123.123, 2) = 123.12, TRUNC(123.123, -2) 23.123 ==> 양수가 소숫점 표현, 음수가 정수 표현
+-- TRUNC(MONTHS_BETWEEN(SYSDATE, HIRE_DATE)/12 , 0) -> 버림 함수 == 년
+-- MOD(MONTHS_BETWEEN(SYSDATE, HIRE_DATE), 12) -> 나머지 함수 == 월, 실수로 결과 출력
+-- ROUND OR CEIL (MOD(MONTHS_BETWEEN(SYSDATE, HIRE_DATE))) -> 월 (몇년 몇개월 정도 일했음, 일수는 날려야함)
+DROP PROCEDURE get_emp2;
+CREATE PROCEDURE get_emp2
+    (p_did IN employees.department_id%TYPE) -- 부서번호 입력
+IS
+    -- 사원번호, 사원이름, 입사일 검색
+    CURSOR emp_cursor IS
+        SELECT employee_id, last_name, hire_date
+        FROM employees
+        WHERE department_id = p_did;
+    
+    v_emp_rec emp_cursor%ROWTYPE;
+    
+    -- 연차, 년/월
+    v_year NUMBER;
+    v_month NUMBER;
+    
+    -- 사원 없는 경우 에러
+    p_no_emp EXCEPTION;
+BEGIN
+    -- 커서 실행
+    OPEN emp_cursor;
+    
+    -- 사원 정보 출력 (사원번호, 사원이름, 연차)
+    LOOP
+        FETCH emp_cursor INTO v_emp_rec;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        
+        -- 년/월 계산
+        v_year := TRUNC(MONTHS_BETWEEN(SYSDATE, v_emp_rec.hire_date)/12 , 0);
+        v_month := ROUND(MOD(MONTHS_BETWEEN(SYSDATE, v_emp_rec.hire_date), 12));
+        
+        -- 출력
+        DBMS_OUTPUT.PUT(v_emp_rec.employee_id || ', ');
+        DBMS_OUTPUT.PUT(v_emp_rec.last_name || ', ');
+        DBMS_OUTPUT.PUT_LINE(v_year || '년 ' || v_month || '개월');
+    END LOOP;
+    
+    -- 사원 없는 경우 에러 발생
+    IF emp_cursor%ROWCOUNT = 0 THEN
+        RAISE p_no_emp;
+    END IF;
+    
+    -- 커서 종료
+    CLOSE emp_cursor;
+    
+EXCEPTION -- 예외 처리
+    WHEN p_no_emp THEN
+        DBMS_OUTPUT.PUT_LINE('해당 부서에는 사원이 없습니다.');
+        CLOSE emp_cursor;
+END;
+/
+
+EXECUTE get_emp(50);
+EXECUTE get_emp2(50);
 SELECT * 
 FROM employees
 WHERE department_id = 60;
@@ -569,8 +633,8 @@ WHERE department_id = 60;
 DROP PROCEDURE y_update;
 CREATE PROCEDURE y_update
     --사번, 급여 증가치(퍼센트) 입력
-    (p_eid NUMBER,
-     p_inc_sal NUMBER)
+    (p_eid IN employees.employee_id%TYPE,
+     p_inc_sal IN employees.salary%TYPE)
 IS
     -- 사원 없는 경우 예외 정의
     p_no_emp EXCEPTION;
@@ -595,20 +659,6 @@ EXECUTE y_update(200, 10);
 SELECT employee_id, salary
 FROM employees
 WHERE employee_id = 200;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
