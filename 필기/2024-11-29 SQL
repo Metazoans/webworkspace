@@ -1,0 +1,50 @@
+-- <2024-11-29 SQL 튜닝>
+튜닝 : 시스템이 최적의 성능 발휘 => 개선 작업
+SQL 튜닝 : DB가 적은 자원으로 최적의 결과를 내도록 SQL 쿼리를 작성하고,
+          기존 쿼리를 개선하는 작업
+
+
+*옵티마이저의 실행계획 (SQL Developer의 계획실행)
+
+SELECT *
+FROM job_history
+ORDER BY end_date;
+-> 계획실행 클릭시
+
+1. TABLE ACCESS(FROM절)
+2. SORT(ORDER BY절)
+
+
+*HINT : /*+ */ => 컬럼보다 앞에 있어야 함
+-FULL : 전체 조회
+-INDEX_ASC  : 지정한 컬럼 기준으로 오름차순 정렬(==ORDER BY)
+-INDEX_DESC : 지정한 컬럼 기준으로 내림차순 정렬(==ORDER BY)
+=>HINT 뒤의 괄호에 쓰는 이름은 PK 설정시 작성한 이름을 사용
+  ==> ALTER TABLE t_emps
+      ADD CONSTRAINT t_emps_pk PRIMARY KEY (employee_id);
+      => 여기서 CONSTRAINT뒤의 이름을 사용
+
+INDEX : PK 또는 UNIQUE 생성시 자동 생성되는 INDEX
+
+ORDER BY를 위한 INDEX를 생성하는 것은 안 좋을 수가 있음
+=> INDEX가 있는 경우 DML을 실행하면 인덱스에도 적용해야 해서 연산이 2번 발생
+=> INSERT UPDATE DELETE 같은 연산시 INDEX가 연결되있는 컬럼이면 2번 연산
+===> 꼭 필요한 경우만 사용하기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
