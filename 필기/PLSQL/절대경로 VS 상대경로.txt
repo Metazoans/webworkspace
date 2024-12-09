@@ -1,0 +1,6 @@
+axios.get('/api/users') => 절대 경로
+axios.get('api/users')  => 상대 경로
+
+http://localhost:8081/customerUpdate/10 => 현재위치
+http://localhost:8081/api/users         => 절대경로
+http://localhost:8081/customerUpdate/api/users => 상대경로
